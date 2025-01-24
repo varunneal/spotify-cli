@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Function to handle volume changes
+change_volume() {
+    if [ "$1" = "up" ]; then
+        osascript -e 'tell application "Spotify" to set sound volume to (sound volume + 10)'
+    elif [ "$1" = "down" ]; then
+        osascript -e 'tell application "Spotify" to set sound volume to (sound volume - 10)'
+    elif [ "$1" = "show" ]; then
+        osascript -e 'tell application "Spotify" to return sound volume'
+    fi
+}
+
+case $1 in
+    "" | "status" | "np" | "now-playing")
+        osascript <<EOF
+if application "Spotify" is running then
+    tell application "Spotify"
+        set currentStatus to player state
+        set currentArtist to artist of current track
+        set currentTrack to name of current track
+        set currentAlbum to album of current track
+        return "♫ " & currentTrack & " - " & currentArtist & " (" & currentStatus & ")\nAlbum: " & currentAlbum
+    end tell
+else
+    return "Spotify is not running"
+end if
+EOF
+        ;;
+    "play")
+        osascript -e 'tell application "Spotify" to play'
+        ;;
+    "pause")
+        osascript -e 'tell application "Spotify" to pause'
+        ;;
+    "toggle")
+        osascript -e 'tell application "Spotify" to playpause'
+        ;;
+    "next")
+        osascript -e 'tell application "Spotify" to next track'
+        ;;
+    "prev" | "previous")
+        osascript -e 'tell application "Spotify" to previous track'
+        ;;
+    "vol")
+        case $2 in
+            "up")
+                change_volume "up"
+                ;;
+            "down")
+                change_volume "down"
+                ;;
+            "")
+                change_volume "show"
+                ;;
+            *)
+                echo "Usage: spotify vol [up|down]"
+                ;;
+        esac
+        ;;
+    "help" | "--help" | "-h")
+        echo "Usage: spotify [command]"
+        echo ""
+        echo "Commands:"
+        echo "  (none)        Show current track info"
+        echo "  play          Start playback"
+        echo "  pause         Pause playback"
+        echo "  toggle        Toggle play/pause"
+        echo "  next          Skip to next track"
+        echo "  prev          Go to previous track"
+        echo "  vol up        Increase volume"
+        echo "  vol down      Decrease volume"
+        echo "  vol           Show current volume"
+        echo "  help          Show this help message"
+        ;;
+    *)
+        echo "Unknown command: $1"
+        echo "Use 'spotify help' to see available commands"
+        ;;
+esac
