@@ -1,6 +1,6 @@
 # installation
 
-Copy and paste the `spotify` file in `/usr/bin/local`. Make sure to make it executable `chmod +x spotify`. 
+Copy and paste the `spotify` bin into `/usr/bin/local`. Make sure to make it executable `chmod +x spotify`. 
 
 # usage
 
