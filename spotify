@@ -36,7 +36,7 @@ EOF
     "toggle")
         osascript -e 'tell application "Spotify" to playpause'
         ;;
-    "next")
+    "next" | "skip")
         osascript -e 'tell application "Spotify" to next track'
         ;;
     "prev" | "previous")
